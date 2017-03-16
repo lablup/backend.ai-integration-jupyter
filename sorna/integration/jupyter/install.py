@@ -11,22 +11,17 @@ import sys
 
 from jupyter_client.kernelspec import KernelSpecManager
 from IPython.utils.tempdir import TemporaryDirectory
+from .kernel import sorna_kernels
 
-kernel_json = {
-    "argv": [sys.executable, "-m", "sorna.integration.jupyter", "-f", "{connection_file}"],
-    "display_name": "Sorna",
-    "language": "python",
-}
 
-def install_kernel_spec(user=True, prefix=None):
+def install_kernel_spec(name, spec_json, user=True, prefix=None):
     with TemporaryDirectory() as td:
         os.chmod(td, 0o755) # Starts off as 700, not user readable
         with open(os.path.join(td, 'kernel.json'), 'w') as f:
-            json.dump(kernel_json, f, sort_keys=True)
-        # TODO: Copy any resources
-
-        print('Installing Jupyter kernel spec')
-        KernelSpecManager().install_kernel_spec(td, 'sorna', user=user, replace=True, prefix=prefix)
+            json.dump(spec_json, f, sort_keys=True)
+        print(f"Installing Sorna-backed Jupyter kernel spec: {spec_json['display_name']}")
+        KernelSpecManager().install_kernel_spec(
+            td, name, user=user, replace=True, prefix=prefix)
 
 def _is_root():
     try:
@@ -50,7 +45,16 @@ def main(argv=None):
     if not args.prefix and not _is_root():
         args.user = True
 
-    install_kernel_spec(user=args.user, prefix=args.prefix)
+    for kern in sorna_kernels:
+        spec = {
+            "argv": [sys.executable, "-m", "sorna.integration.jupyter",
+                     "-f", "{connection_file}",
+                     "--",
+                     "-k", kern.__name__],
+            "display_name": kern.language_info['name'],
+            "language": kern.language,
+        }
+        install_kernel_spec(kern.__name__, spec, user=args.user, prefix=args.prefix)
 
 if __name__ == '__main__':
     main()
