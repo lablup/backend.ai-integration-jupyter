@@ -2,7 +2,9 @@
 Your Jupyter notebooks are running on the Sorna Cloud!
 
 
-## Installation
+## Installation and Usage
+
+First, grab your API keypair in [Sorna Cloud](https://cloud.sorna.io).
 
 ```sh
 $ pip install jupyter sorna-jupyter-kernel
@@ -12,4 +14,6 @@ $ export SORNA_SECRET_KEY=...
 $ jupyter notebook
 ```
 
-Grab your API keypair in [Sorna Cloud](https://cloud.sorna.io).
+Then you will see Sorna kernels in the new notebook menu:
+
+![Preview for the menu to create a new notebook](nbmenu-preview.png)
