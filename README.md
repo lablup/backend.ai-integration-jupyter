@@ -16,4 +16,4 @@ $ jupyter notebook
 
 Then you will see Sorna kernels in the new notebook menu:
 
-![Preview for the menu to create a new notebook](nbmenu-preview.png)
+<p style="text-align:center"><img src="nbmenu-preview.png" width="300"></p>
