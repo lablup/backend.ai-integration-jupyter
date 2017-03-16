@@ -7,7 +7,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.1.0-dev',
+    version='0.1.0',
     description='Sorna Jupyter Kernel Integration',
     long_description='',
     url='https://github.com/lablup/sorna-jupyter-kernel',
@@ -33,14 +33,6 @@ setup(
 
     python_requires='>=3.6',
     install_requires=[
-        'coloredlogs>=5.2',
-        'async_timeout>=1.1',
-        'aiohttp>=1.1',
-        'namedlist',
-        'requests',
-        'requests_unixsocket',
-        'simplejson',
-        'uvloop>=0.7',
         'sorna-client>=0.9,<1.0',
     ],
     extras_require={
