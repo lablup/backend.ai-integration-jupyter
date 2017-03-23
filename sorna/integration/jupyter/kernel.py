@@ -95,6 +95,7 @@ class SornaPythonKernel(SornaKernelBase):
         'name': 'Python 3 on Sorna',
         'mimetype': 'text/x-python3',
         'file_extension': '.py',
+        'codemirror_mode': 'python',
     }
     banner = 'Sorna (Python 3)'
 
@@ -109,6 +110,7 @@ class SornaPythonTensorFlowKernel(SornaKernelBase):
         'name': 'TensorFlow (Python 3, CPU) on Sorna',
         'mimetype': 'text/x-python3',
         'file_extension': '.py',
+        'codemirror_mode': 'python',
     }
     banner = 'Sorna (TensorFlow with Python 3)'
 
@@ -123,6 +125,7 @@ class SornaPythonTensorFlowGPUKernel(SornaKernelBase):
         'name': 'TensorFlow (Python 3, GPU) on Sorna',
         'mimetype': 'text/x-python3',
         'file_extension': '.py',
+        'codemirror_mode': 'python',
     }
     banner = 'Sorna (GPU-accelerated TensorFlow with Python 3)'
 
@@ -137,6 +140,7 @@ class SornaJavascriptKernel(SornaKernelBase):
         'name': 'Javascript (NodeJS 6) on Sorna',
         'mimetype': 'text/javascript',
         'file_extension': '.js',
+        'codemirror_mode': 'javascript',
     }
     banner = 'Sorna (NodeJS 6)'
 
@@ -151,6 +155,7 @@ class SornaPHPKernel(SornaKernelBase):
         'name': 'PHP 7 on Sorna',
         'mimetype': 'text/x-php',
         'file_extension': '.php',
+        'codemirror_mode': 'php',
     }
     banner = 'Sorna (PHP 7)'
 
@@ -165,6 +170,7 @@ class SornaJuliaKernel(SornaKernelBase):
         'name': 'Julia 0.5 on Sorna',
         'mimetype': 'text/x-julia',
         'file_extension': '.jl',
+        'codemirror_mode': 'julia',
     }
     banner = 'Sorna (Julia 0.5)'
 
@@ -179,6 +185,7 @@ class SornaRKernel(SornaKernelBase):
         'name': 'R 3 on Sorna',
         'mimetype': 'text/x-r-source',
         'file_extension': '.R',
+        'codemirror_mode': 'Rscript',
     }
     banner = 'Sorna (R 3)'
 
@@ -193,6 +200,7 @@ class SornaLuaKernel(SornaKernelBase):
         'name': 'Lua 5.3 on Sorna',
         'mimetype': 'text/x-lua',
         'file_extension': '.lua',
+        'codemirror_mode': 'lua',
     }
     banner = 'Sorna (Lua 5.3)'
 
