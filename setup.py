@@ -1,5 +1,10 @@
 from setuptools import setup
 
+try:
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
+except (IOError, ImportError):
+    long_description = ""
 
 setup(
     name='sorna-jupyter-kernel',
@@ -9,7 +14,7 @@ setup(
     # https://packaging.python.org/en/latest/single_source_version.html
     version='0.1.1',
     description='Sorna Jupyter Kernel Integration',
-    long_description='',
+    long_description=long_description,
     url='https://github.com/lablup/sorna-jupyter-kernel',
     author='Lablup Inc.',
     author_email='joongi@lablup.com',
@@ -36,7 +41,7 @@ setup(
         'sorna-client>=0.9,<1.0',
     ],
     extras_require={
-        'dev': ['pytest', 'flake8', 'pep8-naming'],
+        'dev': ['pytest', 'pypandoc', 'flake8', 'pep8-naming'],
         'test': ['pytest'],
     },
     dependency_links=[
