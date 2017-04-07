@@ -117,6 +117,36 @@ class SornaPythonTensorFlowKernel(SornaKernelBase):
     sorna_lang = 'python3-tensorflow'
 
 
+class SornaPythonTorchKernel(SornaKernelBase):
+
+    language = 'python'
+    language_version = '3'
+    language_info = {
+        'name': 'PyTorch (Python 3, CPU) on Sorna',
+        'mimetype': 'text/x-python3',
+        'file_extension': '.py',
+        'codemirror_mode': 'python',
+    }
+    banner = 'Sorna (TensorFlow with Python 3)'
+
+    sorna_lang = 'python3-torch'
+
+
+class SornaPythonTorchGPUKernel(SornaKernelBase):
+
+    language = 'python'
+    language_version = '3'
+    language_info = {
+        'name': 'PyTorch (Python 3, GPU) on Sorna',
+        'mimetype': 'text/x-python3',
+        'file_extension': '.py',
+        'codemirror_mode': 'python',
+    }
+    banner = 'Sorna (TensorFlow with Python 3)'
+
+    sorna_lang = 'python3-torch-gpu'
+
+
 class SornaPythonTensorFlowGPUKernel(SornaKernelBase):
 
     language = 'python'
@@ -209,6 +239,8 @@ class SornaLuaKernel(SornaKernelBase):
 
 sorna_kernels = [
     SornaPythonKernel,
+    SornaPythonTorchKernel,
+    SornaPythonTorchGPUKernel,
     SornaPythonTensorFlowKernel,
     SornaPythonTensorFlowGPUKernel,
     SornaJavascriptKernel,
