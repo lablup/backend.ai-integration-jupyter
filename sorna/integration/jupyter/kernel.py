@@ -82,9 +82,9 @@ class SornaKernelBase(KernelBase):
                 if e.args[0] == 404:
                     pass
                 else:
-                    self.log.exception()
+                    self.log.exception('Sorna API Error')
             except:
-                self.log.exception()
+                self.log.exception('Sorna API Error')
 
 
 class SornaPythonKernel(SornaKernelBase):
