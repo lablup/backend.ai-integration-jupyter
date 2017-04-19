@@ -1,9 +1,12 @@
-from ipykernel.kernelbase import Kernel as KernelBase
+import logging
+
+from metakernel import MetaKernel
+
 from sorna.kernel import Kernel
 from sorna.exceptions import SornaAPIError
 
 
-class SornaKernelBase(KernelBase):
+class SornaKernelBase(MetaKernel):
 
     # ref: https://github.com/ipython/ipykernel/blob/master/ipykernel/kernelbase.py
 
@@ -22,14 +25,21 @@ class SornaKernelBase(KernelBase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.log.debug(f'__init__: {self.ident}')
+        self.log.info(f'Sorna kernel starting with client session ID: {self.ident}')
         self.kernel = Kernel.get_or_create(self.sorna_lang, self.ident)
 
-    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=False):
-        self.log.debug('do_execute')
+    def do_execute_direct(self, code,
+                          silent=False,
+                          store_history=True,
+                          user_expressions=None,
+                          allow_stdin=False):
         self._allow_stdin = allow_stdin
         while True:
-            result = self.kernel.execute(code, mode='query')
+            try:
+                result = self.kernel.execute(code, mode='query')
+            except SornaAPIError as e:
+                self.Error(e)
+                return
 
             if not silent:
                 for item in result['console']:
@@ -64,15 +74,7 @@ class SornaKernelBase(KernelBase):
             elif result['status'] == 'continued':
                 code = ''
 
-        return {
-            'status': 'ok',
-            'execution_count': self.execution_count,
-            'payload': [],
-            'user_expressions': {},
-        }
-
     def do_shutdown(self, restart=False):
-        self.log.debug('do_shutdown')
         if restart:
             self.kernel.restart()
         else:
@@ -80,11 +82,23 @@ class SornaKernelBase(KernelBase):
                 self.kernel.destroy()
             except SornaAPIError as e:
                 if e.args[0] == 404:
+                    self.log.warning('do_shutdown: missing kernel, ignoring.')
                     pass
                 else:
-                    self.log.exception('Sorna API Error')
+                    self.log.exception('do_shutdown: Sorna API Error')
             except:
-                self.log.exception('Sorna API Error')
+                self.log.exception('do_shutdown: Sorna API Error')
+
+    def get_completions(self, info):
+        result = self.kernel.execute(info['code'], mode='complete', opts={
+            'row': info['line_num'],
+            'col': info['column'],
+            'line': info['line'],
+            'post': info['post'],
+        })
+        if 'completions' in result and result['completions'] is not None:
+            return result['completions']
+        return tuple()
 
 
 class SornaPythonKernel(SornaKernelBase):

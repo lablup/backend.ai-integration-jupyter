@@ -39,6 +39,7 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'sorna-client>=0.9,<1.0',
+        'metakernel>=0.20.1',
     ],
     extras_require={
         'dev': ['pytest', 'pypandoc', 'flake8', 'pep8-naming'],
