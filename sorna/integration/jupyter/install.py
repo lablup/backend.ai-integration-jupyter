@@ -8,6 +8,7 @@ import argparse
 import json
 import os
 import sys
+import webbrowser
 
 from jupyter_client.kernelspec import KernelSpecManager
 from IPython.utils.tempdir import TemporaryDirectory
@@ -23,11 +24,23 @@ def install_kernel_spec(name, spec_json, user=True, prefix=None):
         KernelSpecManager().install_kernel_spec(
             td, name, user=user, replace=True, prefix=prefix)
 
+
+def query_yes_no(prompt):
+    valid = {'y': True, 'yes': True, 'n': False, 'no': False}
+    while True:
+        choice = input(f'{prompt} [y/n] ').lower()
+        if choice in valid:
+            return valid[choice]
+        else:
+            prompt = 'Pleas answer in y/yes/n/no.'
+
+
 def _is_root():
     try:
         return os.geteuid() == 0
     except AttributeError:
         return False # assume not an admin on non-Unix platforms
+
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
@@ -35,6 +48,8 @@ def main(argv=None):
         help="Install to the per-user kernels registry. Default if not root.")
     ap.add_argument('--sys-prefix', action='store_true',
         help="Install to sys.prefix (e.g. a virtualenv or conda env)")
+    ap.add_argument('-q', '--quiet', action='store_true',
+        help="Do not ask the user anything.")
     ap.add_argument('--prefix',
         help="Install to the given prefix. "
              "Kernelspec will be installed in {PREFIX}/share/jupyter/kernels/")
@@ -55,6 +70,21 @@ def main(argv=None):
             "language": kern.language,
         }
         install_kernel_spec(kern.__name__, spec, user=args.user, prefix=args.prefix)
+
+    if not args.quiet:
+        print()
+        has_api_key = bool(os.environ.get('SORNA_ACCESS_KEY', ''))
+        if has_api_key:
+            print('It seems that you already configured the API key. Enjoy!')
+        else:
+            if query_yes_no('You can get your own API keypair from https://cloud.sorna.io. Do you want to open the site?'):
+                webbrowser.open_new_tab('https://cloud.sorna.io')
+            print()
+            print('If you already have the keypair or just grabbed a new one,')
+            print('run the following in your shell before running jupyter notebook:\n')
+            print('  export SORNA_ACCESS_KEY="AKIA..."')
+            print('  export SORNA_SECRET_KEY="......."\n')
+
 
 if __name__ == '__main__':
     main()
