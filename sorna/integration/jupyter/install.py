@@ -15,6 +15,14 @@ from IPython.utils.tempdir import TemporaryDirectory
 from .kernel import sorna_kernels
 
 
+def clean_kernel_spec(user=True, prefix=None):
+    mgr = KernelSpecManager()
+    for name, info in mgr.get_all_specs().items():
+        if name.startswith('sorna'):
+            print(f"Removing existing Sorna kernel: {info['spec']['display_name']}")
+            mgr.remove_kernel_spec(name)
+
+
 def install_kernel_spec(name, spec_json, user=True, prefix=None):
     with TemporaryDirectory() as td:
         os.chmod(td, 0o755) # Starts off as 700, not user readable
@@ -60,6 +68,7 @@ def main(argv=None):
     if not args.prefix and not _is_root():
         args.user = True
 
+    clean_kernel_spec(user=args.user, prefix=args.prefix)
     for kern in sorna_kernels:
         spec = {
             "argv": [sys.executable, "-m", "sorna.integration.jupyter",
