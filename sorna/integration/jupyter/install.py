@@ -17,6 +17,9 @@ from .kernel import sorna_kernels
 
 def clean_kernel_spec(user=True, prefix=None):
     mgr = KernelSpecManager()
+    # NOTE: remove_kernel_spec() and get_all_specs() does not support explicit prefix.
+    #       Sometimes we may need to perform --clean-only multiple times to completely
+    #       remove all kernelspecs installed around venvs and system global directories.
     for name, info in mgr.get_all_specs().items():
         if name.startswith('sorna'):
             print(f"Removing existing Sorna kernel: {info['spec']['display_name']}")
@@ -56,6 +59,8 @@ def main(argv=None):
         help="Install to the per-user kernels registry. Default if not root.")
     ap.add_argument('--sys-prefix', action='store_true',
         help="Install to sys.prefix (e.g. a virtualenv or conda env)")
+    ap.add_argument('--clean-only', action='store_true',
+        help="Perform only clean-up of existing Sorna kernels.")
     ap.add_argument('-q', '--quiet', action='store_true',
         help="Do not ask the user anything.")
     ap.add_argument('--prefix',
@@ -69,6 +74,9 @@ def main(argv=None):
         args.user = True
 
     clean_kernel_spec(user=args.user, prefix=args.prefix)
+    if args.clean_only:
+        return
+
     for kern in sorna_kernels:
         spec = {
             "argv": [sys.executable, "-m", "sorna.integration.jupyter",
