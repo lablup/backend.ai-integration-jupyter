@@ -32,13 +32,18 @@ class SornaKernelBase(MetaKernel):
                           silent=False,
                           store_history=True,
                           user_expressions=None,
-                          allow_stdin=False):
+                          allow_stdin=True):
         self._allow_stdin = allow_stdin
         while True:
             try:
                 result = self.kernel.execute(code, mode='query')
             except SornaAPIError as e:
-                self.Error(e)
+                if e.args[0] == 404:
+                    self.Error('[Lablup.AI] The kernel is not found (maybe terminated due to idle/exec timeouts).')
+                    self.Error('[Lablup.AI] Please restart the kernel to run again.')
+                else:
+                    detail = json.loads(e.args[2])
+                    self.Error(f"[Labup.AI] The server returned an error: {e.args[0]} {e.args[1]} ({detail['title']})")
                 return
 
             if not silent:
@@ -87,9 +92,9 @@ class SornaKernelBase(MetaKernel):
                 self.log.warning('do_shutdown: missing kernel, ignoring.')
                 pass
             else:
-                self.log.exception('do_shutdown: Sorna API Error')
+                self.log.exception('do_shutdown: API returned an error')
         except:
-            self.log.exception('do_shutdown: Sorna API Error')
+            self.log.exception('do_shutdown: API returned an error')
         return super().do_shutdown(restart)
 
     def get_completions(self, info):
