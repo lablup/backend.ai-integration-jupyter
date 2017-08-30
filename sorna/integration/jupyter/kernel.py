@@ -80,7 +80,7 @@ class SornaKernelBase(MetaKernel):
                 code = ''
 
     def restart_kernel(self):
-        self.kernel = Kernel.get_or_create(self.sorna_lang, self.ident)
+        pass
 
     def do_shutdown(self, restart):
         # Jupyter's restarting first destroys the kernel and then start it over again.
@@ -90,7 +90,6 @@ class SornaKernelBase(MetaKernel):
         except SornaAPIError as e:
             if e.args[0] == 404:
                 self.log.warning('do_shutdown: missing kernel, ignoring.')
-                pass
             else:
                 self.log.exception('do_shutdown: API returned an error')
         except:
