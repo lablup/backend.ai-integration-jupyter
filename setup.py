@@ -1,10 +1,6 @@
 from setuptools import setup
+from pathlib import Path
 
-try:
-    import pypandoc
-    long_description = pypandoc.convert('README.md', 'rst')
-except (IOError, ImportError):
-    long_description = ""
 
 setup(
     name='sorna-jupyter-kernel',
@@ -12,9 +8,9 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.1.2',
+    version='0.1.3',
     description='Sorna Jupyter Kernel Integration',
-    long_description=long_description,
+    long_description=Path('README.rst').read_text(),
     url='https://github.com/lablup/sorna-jupyter-kernel',
     author='Lablup Inc.',
     author_email='joongi@lablup.com',
@@ -38,15 +34,13 @@ setup(
 
     python_requires='>=3.6',
     install_requires=[
-        'sorna-client>=0.9,<1.0',
+        'sorna-client~=0.9.0',
         'metakernel>=0.20.1',
     ],
     extras_require={
-        'dev': ['pytest', 'pypandoc', 'flake8', 'pep8-naming'],
+        'dev': ['pytest', 'flake8'],
         'test': ['pytest'],
     },
-    dependency_links=[
-    ],
     package_data={
     },
     data_files=[],

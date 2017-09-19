@@ -228,13 +228,58 @@ class SornaJuliaKernel(SornaKernelBase):
     sorna_lang = 'julia'
 
 
+class SornaCKernel(SornaKernelBase):
+
+    language = 'c'
+    language_version = '11'
+    language_info = {
+        'name': 'C11 on Sorna',
+        'mimetype': 'text/x-csrc',
+        'file_extension': '.c',
+        'codemirror_mode': 'clike',
+    }
+    banner = 'Sorna (C [gnu11])'
+
+    sorna_lang = 'c'
+
+
+class SornaCppKernel(SornaKernelBase):
+
+    language = 'cpp'
+    language_version = '14'
+    language_info = {
+        'name': 'C++14 on Sorna',
+        'mimetype': 'text/x-c++src',
+        'file_extension': '.cc',
+        'codemirror_mode': 'clike',
+    }
+    banner = 'Sorna (C++ [gnu++14])'
+
+    sorna_lang = 'cpp'
+
+
+class SornaJavaKernel(SornaKernelBase):
+
+    language = 'java'
+    language_version = '8'
+    language_info = {
+        'name': 'Java8 on Sorna',
+        'mimetype': 'text/x-java',
+        'file_extension': '.java',
+        'codemirror_mode': 'clike',
+    }
+    banner = 'Sorna (Java [openjdk8])'
+
+    sorna_lang = 'java8'
+
+
 class SornaRKernel(SornaKernelBase):
 
     language = 'r'
     language_version = '3'
     language_info = {
         'name': 'R 3 on Sorna',
-        'mimetype': 'text/x-r-source',
+        'mimetype': 'text/x-rsrc',
         'file_extension': '.R',
         'codemirror_mode': 'Rscript',
     }
@@ -267,6 +312,9 @@ sorna_kernels = [
     SornaJavascriptKernel,
     SornaPHPKernel,
     SornaJuliaKernel,
+    SornaCKernel,
+    SornaCppKernel,
+    SornaJavaKernel,
     SornaRKernel,
     SornaLuaKernel,
 ]
