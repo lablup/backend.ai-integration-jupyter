@@ -1,32 +1,30 @@
-import logging
-
 from metakernel import MetaKernel
 
-from sorna.kernel import Kernel
-from sorna.exceptions import SornaAPIError
+from ai.backend.client.kernel import Kernel
+from ai.backend.client.exceptions import BackendAPIError
 
 
-class SornaKernelBase(MetaKernel):
+class BackendKernelBase(MetaKernel):
 
     # ref: https://github.com/ipython/ipykernel/blob/master/ipykernel/kernelbase.py
 
-    implementation = 'Sorna'
+    implementation = 'Backend.AI'
     implementation_version = '1.0'
     language = 'python'
     language_version = '3'
     language_info = {
-        'name': 'Sorna (base)',
+        'name': 'Backend.AI (base)',
         'mimetype': 'text/x-python3',
         'file_extension': '.py',
     }
-    banner = 'Sorna (base)'
+    banner = 'Backend.AI Base'
 
-    sorna_lang = 'python3'
+    backend_lang = 'python3'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.log.info(f'Sorna kernel starting with client session ID: {self.ident}')
-        self.kernel = Kernel.get_or_create(self.sorna_lang, self.ident)
+        self.log.info(f'Backend.AI kernel starting with client session ID: {self.ident}')
+        self.kernel = Kernel.get_or_create(self.backend_lang, self.ident)
 
     def do_execute_direct(self, code,
                           silent=False,
@@ -37,13 +35,12 @@ class SornaKernelBase(MetaKernel):
         while True:
             try:
                 result = self.kernel.execute(code, mode='query')
-            except SornaAPIError as e:
-                if e.args[0] == 404:
-                    self.Error('[Lablup.AI] The kernel is not found (maybe terminated due to idle/exec timeouts).')
-                    self.Error('[Lablup.AI] Please restart the kernel to run again.')
+            except BackendAPIError as e:
+                if e.status == 404:
+                    self.Error('[Backend.AI] The kernel is not found (maybe terminated due to idle/exec timeouts).')
+                    self.Error('[Backend.AI] Please restart the kernel to run again.')
                 else:
-                    detail = json.loads(e.args[2])
-                    self.Error(f"[Labup.AI] The server returned an error: {e.args[0]} {e.args[1]} ({detail['title']})")
+                    self.Error(f"[Backend.AI] The server returned an error: {e.status} {e.reason} ({e.data['title']})")
                 return
 
             if not silent:
@@ -87,8 +84,8 @@ class SornaKernelBase(MetaKernel):
         # We cannot use our own restarting mechanism as it produces duplicate kernels.
         try:
             self.kernel.destroy()
-        except SornaAPIError as e:
-            if e.args[0] == 404:
+        except BackendAPIError as e:
+            if e.status == 404:
                 self.log.warning('do_shutdown: missing kernel, ignoring.')
             else:
                 self.log.exception('do_shutdown: API returned an error')
@@ -108,213 +105,213 @@ class SornaKernelBase(MetaKernel):
         return tuple()
 
 
-class SornaPythonKernel(SornaKernelBase):
+class BackendPythonKernel(BackendKernelBase):
 
     language = 'python'
     language_version = '3'
     language_info = {
-        'name': 'Python 3 on Sorna',
+        'name': 'Python 3 on Backend.AI',
         'mimetype': 'text/x-python3',
         'file_extension': '.py',
         'codemirror_mode': 'python',
     }
-    banner = 'Sorna (Python 3)'
+    banner = 'Backend (Python 3)'
 
-    sorna_lang = 'python3'
+    backend_lang = 'python3'
 
 
-class SornaPythonTensorFlowKernel(SornaKernelBase):
+class BackendPythonTensorFlowKernel(BackendKernelBase):
 
     language = 'python'
     language_version = '3'
     language_info = {
-        'name': 'TensorFlow (Python 3, CPU) on Sorna',
+        'name': 'TensorFlow (Python 3, CPU) on Backend.AI',
         'mimetype': 'text/x-python3',
         'file_extension': '.py',
         'codemirror_mode': 'python',
     }
-    banner = 'Sorna (TensorFlow with Python 3)'
+    banner = 'Backend (TensorFlow with Python 3)'
 
-    sorna_lang = 'python3-tensorflow'
+    backend_lang = 'python3-tensorflow'
 
 
-class SornaPythonTorchKernel(SornaKernelBase):
+class BackendPythonTorchKernel(BackendKernelBase):
 
     language = 'python'
     language_version = '3'
     language_info = {
-        'name': 'PyTorch (Python 3, CPU) on Sorna',
+        'name': 'PyTorch (Python 3, CPU) on Backend.AI',
         'mimetype': 'text/x-python3',
         'file_extension': '.py',
         'codemirror_mode': 'python',
     }
-    banner = 'Sorna (TensorFlow with Python 3)'
+    banner = 'Backend (TensorFlow with Python 3)'
 
-    sorna_lang = 'python3-torch'
+    backend_lang = 'python3-torch'
 
 
-class SornaPythonTorchGPUKernel(SornaKernelBase):
+class BackendPythonTorchGPUKernel(BackendKernelBase):
 
     language = 'python'
     language_version = '3'
     language_info = {
-        'name': 'PyTorch (Python 3, GPU) on Sorna',
+        'name': 'PyTorch (Python 3, GPU) on Backend.AI',
         'mimetype': 'text/x-python3',
         'file_extension': '.py',
         'codemirror_mode': 'python',
     }
-    banner = 'Sorna (TensorFlow with Python 3)'
+    banner = 'Backend (TensorFlow with Python 3)'
 
-    sorna_lang = 'python3-torch-gpu'
+    backend_lang = 'python3-torch-gpu'
 
 
-class SornaPythonTensorFlowGPUKernel(SornaKernelBase):
+class BackendPythonTensorFlowGPUKernel(BackendKernelBase):
 
     language = 'python'
     language_version = '3'
     language_info = {
-        'name': 'TensorFlow (Python 3, GPU) on Sorna',
+        'name': 'TensorFlow (Python 3, GPU) on Backend.AI',
         'mimetype': 'text/x-python3',
         'file_extension': '.py',
         'codemirror_mode': 'python',
     }
-    banner = 'Sorna (GPU-accelerated TensorFlow with Python 3)'
+    banner = 'Backend (GPU-accelerated TensorFlow with Python 3)'
 
-    sorna_lang = 'python3-tensorflow-gpu'
+    backend_lang = 'python3-tensorflow-gpu'
 
 
-class SornaJavascriptKernel(SornaKernelBase):
+class BackendJavascriptKernel(BackendKernelBase):
 
     language = 'javascript'
     language_version = '6'
     language_info = {
-        'name': 'Javascript (NodeJS 6) on Sorna',
+        'name': 'Javascript (NodeJS 6) on Backend.AI',
         'mimetype': 'text/javascript',
         'file_extension': '.js',
         'codemirror_mode': 'javascript',
     }
-    banner = 'Sorna (NodeJS 6)'
+    banner = 'Backend (NodeJS 6)'
 
-    sorna_lang = 'nodejs6'
+    backend_lang = 'nodejs6'
 
 
-class SornaPHPKernel(SornaKernelBase):
+class BackendPHPKernel(BackendKernelBase):
 
     language = 'php'
     language_version = '7'
     language_info = {
-        'name': 'PHP 7 on Sorna',
+        'name': 'PHP 7 on Backend.AI',
         'mimetype': 'text/x-php',
         'file_extension': '.php',
         'codemirror_mode': 'php',
     }
-    banner = 'Sorna (PHP 7)'
+    banner = 'Backend (PHP 7)'
 
-    sorna_lang = 'php7'
+    backend_lang = 'php7'
 
 
-class SornaJuliaKernel(SornaKernelBase):
+class BackendJuliaKernel(BackendKernelBase):
 
     language = 'julia'
     language_version = '0.5'
     language_info = {
-        'name': 'Julia 0.5 on Sorna',
+        'name': 'Julia 0.5 on Backend.AI',
         'mimetype': 'text/x-julia',
         'file_extension': '.jl',
         'codemirror_mode': 'julia',
     }
-    banner = 'Sorna (Julia 0.5)'
+    banner = 'Backend (Julia 0.5)'
 
-    sorna_lang = 'julia'
+    backend_lang = 'julia'
 
 
-class SornaCKernel(SornaKernelBase):
+class BackendCKernel(BackendKernelBase):
 
     language = 'c'
     language_version = '11'
     language_info = {
-        'name': 'C11 on Sorna',
+        'name': 'C11 on Backend.AI',
         'mimetype': 'text/x-csrc',
         'file_extension': '.c',
         'codemirror_mode': 'clike',
     }
-    banner = 'Sorna (C [gnu11])'
+    banner = 'Backend (C [gnu11])'
 
-    sorna_lang = 'c'
+    backend_lang = 'c'
 
 
-class SornaCppKernel(SornaKernelBase):
+class BackendCppKernel(BackendKernelBase):
 
     language = 'cpp'
     language_version = '14'
     language_info = {
-        'name': 'C++14 on Sorna',
+        'name': 'C++14 on Backend.AI',
         'mimetype': 'text/x-c++src',
         'file_extension': '.cc',
         'codemirror_mode': 'clike',
     }
-    banner = 'Sorna (C++ [gnu++14])'
+    banner = 'Backend (C++ [gnu++14])'
 
-    sorna_lang = 'cpp'
+    backend_lang = 'cpp'
 
 
-class SornaJavaKernel(SornaKernelBase):
+class BackendJavaKernel(BackendKernelBase):
 
     language = 'java'
     language_version = '8'
     language_info = {
-        'name': 'Java8 on Sorna',
+        'name': 'Java8 on Backend.AI',
         'mimetype': 'text/x-java',
         'file_extension': '.java',
         'codemirror_mode': 'clike',
     }
-    banner = 'Sorna (Java [openjdk8])'
+    banner = 'Backend (Java [openjdk8])'
 
-    sorna_lang = 'java8'
+    backend_lang = 'java8'
 
 
-class SornaRKernel(SornaKernelBase):
+class BackendRKernel(BackendKernelBase):
 
     language = 'r'
     language_version = '3'
     language_info = {
-        'name': 'R 3 on Sorna',
+        'name': 'R 3 on Backend.AI',
         'mimetype': 'text/x-rsrc',
         'file_extension': '.R',
         'codemirror_mode': 'Rscript',
     }
-    banner = 'Sorna (R 3)'
+    banner = 'Backend (R 3)'
 
-    sorna_lang = 'r3'
+    backend_lang = 'r3'
 
 
-class SornaLuaKernel(SornaKernelBase):
+class BackendLuaKernel(BackendKernelBase):
 
     language = 'lua'
     language_version = '5.3'
     language_info = {
-        'name': 'Lua 5.3 on Sorna',
+        'name': 'Lua 5.3 on Backend.AI',
         'mimetype': 'text/x-lua',
         'file_extension': '.lua',
         'codemirror_mode': 'lua',
     }
-    banner = 'Sorna (Lua 5.3)'
+    banner = 'Backend (Lua 5.3)'
 
-    sorna_lang = 'lua5'
+    backend_lang = 'lua5'
 
 
-sorna_kernels = [
-    SornaPythonKernel,
-    SornaPythonTorchKernel,
-    SornaPythonTorchGPUKernel,
-    SornaPythonTensorFlowKernel,
-    SornaPythonTensorFlowGPUKernel,
-    SornaJavascriptKernel,
-    SornaPHPKernel,
-    SornaJuliaKernel,
-    SornaCKernel,
-    SornaCppKernel,
-    SornaJavaKernel,
-    SornaRKernel,
-    SornaLuaKernel,
+kernels = [
+    BackendPythonKernel,
+    BackendPythonTorchKernel,
+    BackendPythonTorchGPUKernel,
+    BackendPythonTensorFlowKernel,
+    BackendPythonTensorFlowGPUKernel,
+    BackendJavascriptKernel,
+    BackendPHPKernel,
+    BackendJuliaKernel,
+    BackendCKernel,
+    BackendCppKernel,
+    BackendJavaKernel,
+    BackendRKernel,
+    BackendLuaKernel,
 ]

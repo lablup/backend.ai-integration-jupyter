@@ -7,6 +7,9 @@ Changes
  - Change the project name to "Backend.AI Jupyter Integration"
    and the import path to "ai.backend.integration".
 
+ - This version is now paired with the Backend.AI Client for Python v1.0.0
+   release.
+
  - Add support for Python 3.5 (along with the new Backend.AI client library).
 
  - README is provided in ReST to remove dev-dependency to pypandoc.
