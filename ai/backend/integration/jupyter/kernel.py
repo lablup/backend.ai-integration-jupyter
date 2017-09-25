@@ -2,7 +2,7 @@ from metakernel import MetaKernel
 
 from ai.backend.client.kernel import Kernel
 from ai.backend.client.exceptions import BackendAPIError
-from ai.backend.client.utils import random_token
+from ai.backend.client.compat import token_hex
 
 
 class BackendKernelBase(MetaKernel):
@@ -33,7 +33,7 @@ class BackendKernelBase(MetaKernel):
                           user_expressions=None,
                           allow_stdin=True):
         self._allow_stdin = allow_stdin
-        run_id = random_token()
+        run_id = token_hex(8)
         while True:
             try:
                 result = self.kernel.execute(run_id, code, mode='query')
