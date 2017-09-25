@@ -2,6 +2,7 @@ from metakernel import MetaKernel
 
 from ai.backend.client.kernel import Kernel
 from ai.backend.client.exceptions import BackendAPIError
+from ai.backend.client.utils import random_token
 
 
 class BackendKernelBase(MetaKernel):
@@ -32,9 +33,10 @@ class BackendKernelBase(MetaKernel):
                           user_expressions=None,
                           allow_stdin=True):
         self._allow_stdin = allow_stdin
+        run_id = random_token()
         while True:
             try:
-                result = self.kernel.execute(code, mode='query')
+                result = self.kernel.execute(run_id, code, mode='query')
             except BackendAPIError as e:
                 if e.status == 404:
                     self.Error('[Backend.AI] The kernel is not found (maybe terminated due to idle/exec timeouts).')
@@ -94,15 +96,15 @@ class BackendKernelBase(MetaKernel):
         return super().do_shutdown(restart)
 
     def get_completions(self, info):
-        result = self.kernel.execute(info['code'], mode='complete', opts={
+        result = self.kernel.complete(info['code'], opts={
             'row': info['line_num'],
             'col': info['column'],
             'line': info['line'],
             'post': info['post'],
         })
-        if 'completions' in result and result['completions'] is not None:
-            return result['completions']
-        return tuple()
+        if result is None:
+            return tuple()
+        return result.get('completions', tuple())
 
 
 class BackendPythonKernel(BackendKernelBase):
