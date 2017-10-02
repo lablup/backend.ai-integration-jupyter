@@ -94,8 +94,8 @@ def main(argv=None):
         if has_api_key:
             print('It seems that you already configured the API key. Enjoy!')
         else:
-            if query_yes_no('You can get your own API keypair from https://cloud.sorna.io. Do you want to open the site?'):
-                webbrowser.open_new_tab('https://cloud.sorna.io')
+            if query_yes_no('You can get your own API keypair from https://cloud.backend.ai. Do you want to open the site?'):
+                webbrowser.open_new_tab('https://cloud.backend.ai')
             print()
             print('If you already have the keypair or just grabbed a new one,')
             print('run the following in your shell before running jupyter notebook:\n')
