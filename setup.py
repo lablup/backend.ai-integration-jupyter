@@ -4,7 +4,7 @@ from pathlib import Path
 
 setup(
     name='backend.ai-integration-jupyter',
-    version='0.2.0',
+    version='0.2.1',
     description='Backend.AI Integration for Jupyter',
     long_description=Path('README.rst').read_text(),
     url='https://github.com/lablup/backend.ai-integration-jupyter',

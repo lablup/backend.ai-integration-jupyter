@@ -1,6 +1,12 @@
 Changes
 =======
 
+0.2.1 (2017-10-24)
+------------------
+
+ - Adapt to the latest API with explicit run IDs per execution.
+
+
 0.2.0 (2017-09-19)
 ------------------
 
