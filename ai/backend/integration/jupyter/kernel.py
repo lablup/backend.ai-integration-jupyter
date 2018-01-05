@@ -24,7 +24,7 @@ class BackendKernelBase(MetaKernel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.log.info(f'Backend.AI kernel starting with client session ID: {self.ident}')
+        self.log.info('Backend.AI kernel starting with client session ID: {0}'.format(self.ident))
         self.kernel = Kernel.get_or_create(self.backend_lang, self.ident)
 
     def do_execute_direct(self, code,
@@ -42,7 +42,8 @@ class BackendKernelBase(MetaKernel):
                     self.Error('[Backend.AI] The kernel is not found (maybe terminated due to idle/exec timeouts).')
                     self.Error('[Backend.AI] Please restart the kernel to run again.')
                 else:
-                    self.Error(f"[Backend.AI] The server returned an error: {e.status} {e.reason} ({e.data['title']})")
+                    self.Error("[Backend.AI] The server returned an error: {0.status} {0.reason} ({0.data[title]})"
+                               .format(e))
                 return
 
             if not silent:

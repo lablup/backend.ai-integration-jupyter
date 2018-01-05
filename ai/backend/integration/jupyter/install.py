@@ -22,7 +22,8 @@ def clean_kernel_spec(user=True, prefix=None):
     #       remove all kernelspecs installed around venvs and system global directories.
     for name, info in mgr.get_all_specs().items():
         if name.startswith('backend'):
-            print(f"Removing existing Backend.AI kernel: {info['spec']['display_name']}")
+            print("Removing existing Backend.AI kernel: {0}"
+                  .format(info['spec']['display_name']))
             mgr.remove_kernel_spec(name)
 
 
@@ -31,7 +32,8 @@ def install_kernel_spec(name, spec_json, user=True, prefix=None):
         os.chmod(td, 0o755) # Starts off as 700, not user readable
         with open(os.path.join(td, 'kernel.json'), 'w') as f:
             json.dump(spec_json, f, sort_keys=True)
-        print(f"Installing Backend.AI Jupyter kernel spec: {spec_json['display_name']}")
+        print("Installing Backend.AI Jupyter kernel spec: {0}"
+              .format(spec_json['display_name']))
         KernelSpecManager().install_kernel_spec(
             td, name, user=user, replace=True, prefix=prefix)
 
@@ -39,7 +41,7 @@ def install_kernel_spec(name, spec_json, user=True, prefix=None):
 def query_yes_no(prompt):
     valid = {'y': True, 'yes': True, 'n': False, 'no': False}
     while True:
-        choice = input(f'{prompt} [y/n] ').lower()
+        choice = input('{0} [y/n] '.format(prompt)).lower()
         if choice in valid:
             return valid[choice]
         else:
