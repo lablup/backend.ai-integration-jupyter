@@ -1,6 +1,16 @@
 Changes
 =======
 
+0.2.3 (to be released)
+----------------------
+
+0.2.2 (2018-01-05)
+------------------
+
+ - Adapt to the latest API with explicit modes in the execution loop.
+
+ - Upgrade the client library to v1.1.5 release.
+
 0.2.1 (2017-10-24)
 ------------------
 
