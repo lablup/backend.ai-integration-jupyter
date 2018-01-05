@@ -2,7 +2,6 @@ from metakernel import MetaKernel
 
 from ai.backend.client.kernel import Kernel
 from ai.backend.client.exceptions import BackendAPIError
-from ai.backend.client.compat import token_hex
 
 
 class BackendKernelBase(MetaKernel):
@@ -33,10 +32,12 @@ class BackendKernelBase(MetaKernel):
                           user_expressions=None,
                           allow_stdin=True):
         self._allow_stdin = allow_stdin
-        run_id = token_hex(8)
+        mode = 'query'
+        run_id = None
         while True:
             try:
-                result = self.kernel.execute(run_id, code, mode='query')
+                result = self.kernel.execute(run_id, code, mode)
+                run_id = result['runId']
             except BackendAPIError as e:
                 if e.status == 404:
                     self.Error('[Backend.AI] The kernel is not found (maybe terminated due to idle/exec timeouts).')
@@ -61,22 +62,24 @@ class BackendKernelBase(MetaKernel):
                     elif item[0] == 'media':
                         self.send_response(self.iopub_socket, 'display_data', {
                             'source': '<user-code>',
-                            'data': { item[1][0]: item[1][1] },
+                            'data': {item[1][0]: item[1][1]},
                         })
                     elif item[0] == 'html':
                         self.send_response(self.iopub_socket, 'display_data', {
                             'source': '<user-code>',
-                            'data': { 'text/html': item[1] },
+                            'data': {'text/html': item[1]},
                         })
 
             if result['status'] == 'finished':
                 break
             elif result['status'] == 'waiting-input':
+                mode = 'input'
                 if allow_stdin:
                     code = self.raw_input('')
                 else:
                     code = '(user input not allowed)'
-            elif result['status'] == 'continued':
+            elif result['status'] in ('continued', 'build-finished'):
+                mode = 'continue'
                 code = ''
 
     def restart_kernel(self):
@@ -92,7 +95,7 @@ class BackendKernelBase(MetaKernel):
                 self.log.warning('do_shutdown: missing kernel, ignoring.')
             else:
                 self.log.exception('do_shutdown: API returned an error')
-        except:
+        except Exception:
             self.log.exception('do_shutdown: API returned an error')
         return super().do_shutdown(restart)
 

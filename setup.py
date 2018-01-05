@@ -32,7 +32,7 @@ setup(
 
     python_requires='>=3.5',
     install_requires=[
-        'backend.ai-client~=1.0.0',
+        'backend.ai-client~=1.1.5',
         'metakernel>=0.20.1',
     ],
     extras_require={
