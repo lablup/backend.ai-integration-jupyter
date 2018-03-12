@@ -1,11 +1,18 @@
 Changes
 =======
 
-0.2.3 (to be released)
+0.2.4 (to be released)
 ----------------------
+
+0.2.3 (2018-03-12)
+------------------
+
+ - Upgrade backend.ai-client to v1.2 series.
 
 0.2.2 (2018-01-05)
 ------------------
+
+ - Add support for Python 3.5 as well.
 
  - Adapt to the latest API with explicit modes in the execution loop.
 
