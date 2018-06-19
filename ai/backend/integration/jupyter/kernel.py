@@ -2,6 +2,7 @@ from metakernel import MetaKernel
 
 from ai.backend.client.kernel import Kernel
 from ai.backend.client.exceptions import BackendAPIError
+from ai.backend.client.request import shutdown
 
 
 class BackendKernelBase(MetaKernel):
@@ -97,6 +98,7 @@ class BackendKernelBase(MetaKernel):
                 self.log.exception('do_shutdown: API returned an error')
         except Exception:
             self.log.exception('do_shutdown: API returned an error')
+        shutdown()
         return super().do_shutdown(restart)
 
     def get_completions(self, info):
