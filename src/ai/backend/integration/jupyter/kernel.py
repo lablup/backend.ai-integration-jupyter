@@ -1,8 +1,7 @@
 from metakernel import MetaKernel
 
-from ai.backend.client.kernel import Kernel
+from ai.backend.client.session import Session
 from ai.backend.client.exceptions import BackendAPIError
-from ai.backend.client.request import shutdown
 
 
 class BackendKernelBase(MetaKernel):
@@ -20,12 +19,13 @@ class BackendKernelBase(MetaKernel):
     }
     banner = 'Backend.AI Base'
 
-    backend_lang = 'python3'
+    backend_lang = 'python:3.6'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.log.info('Backend.AI kernel starting with client session ID: {0}'.format(self.ident))
-        self.kernel = Kernel.get_or_create(self.backend_lang, self.ident)
+        self.backend_session = Session()
+        self.kernel = self.backend_session.Kernel.get_or_create(self.backend_lang, self.ident)
 
     def do_execute_direct(self, code,
                           silent=False,
@@ -41,10 +41,12 @@ class BackendKernelBase(MetaKernel):
                 run_id = result['runId']
             except BackendAPIError as e:
                 if e.status == 404:
-                    self.Error('[Backend.AI] The kernel is not found (maybe terminated due to idle/exec timeouts).')
+                    self.Error('[Backend.AI] The kernel is not found '
+                               '(maybe terminated due to idle/exec timeouts).')
                     self.Error('[Backend.AI] Please restart the kernel to run again.')
                 else:
-                    self.Error("[Backend.AI] The server returned an error: {0.status} {0.reason} ({0.data[title]})"
+                    self.Error('[Backend.AI] The server returned an error: '
+                               '{0.status} {0.reason} ({0.data[title]})'
                                .format(e))
                 return
 
@@ -98,7 +100,8 @@ class BackendKernelBase(MetaKernel):
                 self.log.exception('do_shutdown: API returned an error')
         except Exception:
             self.log.exception('do_shutdown: API returned an error')
-        shutdown()
+        finally:
+            self.backend_session.close()
         return super().do_shutdown(restart)
 
     def get_completions(self, info):
@@ -125,7 +128,7 @@ class BackendPythonKernel(BackendKernelBase):
     }
     banner = 'Backend (Python 3)'
 
-    backend_lang = 'python3'
+    backend_lang = 'python:3.6'
 
 
 class BackendPythonTensorFlowKernel(BackendKernelBase):
@@ -140,7 +143,7 @@ class BackendPythonTensorFlowKernel(BackendKernelBase):
     }
     banner = 'Backend (TensorFlow with Python 3)'
 
-    backend_lang = 'python3-tensorflow'
+    backend_lang = 'python-tensorflow:1.8-py36'
 
 
 class BackendPythonTorchKernel(BackendKernelBase):
@@ -155,7 +158,7 @@ class BackendPythonTorchKernel(BackendKernelBase):
     }
     banner = 'Backend (TensorFlow with Python 3)'
 
-    backend_lang = 'python3-torch'
+    backend_lang = 'python-torch:0.2'
 
 
 class BackendPythonTorchGPUKernel(BackendKernelBase):
@@ -170,7 +173,7 @@ class BackendPythonTorchGPUKernel(BackendKernelBase):
     }
     banner = 'Backend (TensorFlow with Python 3)'
 
-    backend_lang = 'python3-torch-gpu'
+    backend_lang = 'python-torch:0.2-gpu'
 
 
 class BackendPythonTensorFlowGPUKernel(BackendKernelBase):
@@ -185,13 +188,13 @@ class BackendPythonTensorFlowGPUKernel(BackendKernelBase):
     }
     banner = 'Backend (GPU-accelerated TensorFlow with Python 3)'
 
-    backend_lang = 'python3-tensorflow-gpu'
+    backend_lang = 'python-tensorflow:1.8-gpu'
 
 
 class BackendJavascriptKernel(BackendKernelBase):
 
     language = 'javascript'
-    language_version = '6'
+    language_version = '8'
     language_info = {
         'name': 'Javascript (NodeJS 6) on Backend.AI',
         'mimetype': 'text/javascript',
@@ -200,7 +203,7 @@ class BackendJavascriptKernel(BackendKernelBase):
     }
     banner = 'Backend (NodeJS 6)'
 
-    backend_lang = 'nodejs6'
+    backend_lang = 'nodejs:8'
 
 
 class BackendPHPKernel(BackendKernelBase):
@@ -215,22 +218,22 @@ class BackendPHPKernel(BackendKernelBase):
     }
     banner = 'Backend (PHP 7)'
 
-    backend_lang = 'php7'
+    backend_lang = 'php:7'
 
 
 class BackendJuliaKernel(BackendKernelBase):
 
     language = 'julia'
-    language_version = '0.5'
+    language_version = '0.6'
     language_info = {
-        'name': 'Julia 0.5 on Backend.AI',
+        'name': 'Julia 0.6 on Backend.AI',
         'mimetype': 'text/x-julia',
         'file_extension': '.jl',
         'codemirror_mode': 'julia',
     }
-    banner = 'Backend (Julia 0.5)'
+    banner = 'Backend (Julia 0.6)'
 
-    backend_lang = 'julia'
+    backend_lang = 'julia:0.6'
 
 
 class BackendCKernel(BackendKernelBase):
@@ -245,7 +248,7 @@ class BackendCKernel(BackendKernelBase):
     }
     banner = 'Backend (C [gnu11])'
 
-    backend_lang = 'c'
+    backend_lang = 'c:gcc6.3'
 
 
 class BackendCppKernel(BackendKernelBase):
@@ -260,7 +263,7 @@ class BackendCppKernel(BackendKernelBase):
     }
     banner = 'Backend (C++ [gnu++14])'
 
-    backend_lang = 'cpp'
+    backend_lang = 'cpp:gcc6.3'
 
 
 class BackendJavaKernel(BackendKernelBase):
@@ -275,7 +278,7 @@ class BackendJavaKernel(BackendKernelBase):
     }
     banner = 'Backend (Java [openjdk8])'
 
-    backend_lang = 'java8'
+    backend_lang = 'java:8'
 
 
 class BackendRKernel(BackendKernelBase):
@@ -290,7 +293,7 @@ class BackendRKernel(BackendKernelBase):
     }
     banner = 'Backend (R 3)'
 
-    backend_lang = 'r3'
+    backend_lang = 'r:3'
 
 
 class BackendLuaKernel(BackendKernelBase):
@@ -305,7 +308,7 @@ class BackendLuaKernel(BackendKernelBase):
     }
     banner = 'Backend (Lua 5.3)'
 
-    backend_lang = 'lua5'
+    backend_lang = 'lua:5.3'
 
 
 kernels = [

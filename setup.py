@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_namespace_packages
 from pathlib import Path
 
 
@@ -25,15 +25,19 @@ setup(
         'Topic :: Scientific/Engineering',
         'Topic :: Software Development',
     ],
+    project_urls={
+        'Documentation': 'http://docs.backend.ai',
+        'Source': 'https://github.com/lablup/backend.ai-integration-jupyter',
+        'Tracker': 'https://github.com/lablup/backend.ai-integration-jupyter/issues',
+    },
 
-    packages=[
-        'ai.backend.integration.jupyter',
-    ],
+    package_dir={'': 'src'},
+    packages=find_namespace_packages(where='src', include='ai.backend.*'),
 
     python_requires='>=3.5',
     install_requires=[
-        'backend.ai-client>=1.3.7,<1.4.0',
-        'metakernel>=0.20.1',
+        'backend.ai-client>=1.4.0',
+        'metakernel>=0.20.14',
     ],
     extras_require={
         'dev': ['pytest', 'flake8'],
