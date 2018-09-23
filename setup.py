@@ -4,9 +4,10 @@ from pathlib import Path
 
 setup(
     name='backend.ai-integration-jupyter',
-    version='0.3.0',
+    version='0.3.1',
     description='Backend.AI Integration for Jupyter',
-    long_description=Path('README.rst').read_text(),
+    long_description=Path('README.md').read_text() + Path('CHANGELOG.md').read_text(),
+    long_description_content_type='text/markdown',
     url='https://github.com/lablup/backend.ai-integration-jupyter',
     author='Lablup Inc.',
     author_email='joongi@lablup.com',
@@ -36,13 +37,17 @@ setup(
 
     python_requires='>=3.5',
     install_requires=[
-        'backend.ai-client>=1.4.0',
-        'metakernel>=0.20.14',
+        'backend.ai-client>=1.4.0,<1.5.0',
+        'metakernel~=0.20.14',
     ],
     extras_require={
+        'build': ['wheel>=0.31.0', 'twine>=0.11.0'],
         'dev': ['pytest', 'flake8'],
         'test': ['pytest'],
     },
+    setup_requires=[
+        'setuptools>=40.1.0',
+    ],
     package_data={
     },
     data_files=[],
