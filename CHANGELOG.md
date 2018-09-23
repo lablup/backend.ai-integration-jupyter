@@ -1,8 +1,18 @@
 Changes
 =======
 
-0.2.5 (to be released)
-----------------------
+0.3.0 (2018-09-23)
+------------------
+
+ - Upgrade backend.ai-client to v1.4 series.
+
+0.2.5 (2018-06-19)
+------------------
+
+ - Support Jupyter notebook 5.0 or higher which has migrated to Tornado 5.0+.
+
+ - Upgrade backend.ai-client to v1.3.4 or higher to keep pace with Jupyter notebook
+   5.0 support.
 
 0.2.4 (2018-03-20)
 ------------------
