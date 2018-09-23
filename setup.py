@@ -6,7 +6,7 @@ setup(
     name='backend.ai-integration-jupyter',
     version='0.3.1',
     description='Backend.AI Integration for Jupyter',
-    long_description=Path('README.md').read_text() + Path('CHANGELOG.md').read_text(),
+    long_description=Path('README.md').read_text() + '\n\n' + Path('CHANGELOG.md').read_text(),
     long_description_content_type='text/markdown',
     url='https://github.com/lablup/backend.ai-integration-jupyter',
     author='Lablup Inc.',
