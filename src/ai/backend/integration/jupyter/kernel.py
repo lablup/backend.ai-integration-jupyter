@@ -9,7 +9,7 @@ class BackendKernelBase(MetaKernel):
     # ref: https://github.com/ipython/ipykernel/blob/master/ipykernel/kernelbase.py
 
     implementation = 'Backend.AI'
-    implementation_version = '1.0'
+    implementation_version = '1.1'
     language = 'python'
     language_version = '3'
     language_info = {
@@ -143,7 +143,7 @@ class BackendPythonTensorFlowKernel(BackendKernelBase):
     }
     banner = 'Backend (TensorFlow with Python 3)'
 
-    backend_lang = 'python-tensorflow:1.8-py36'
+    backend_lang = 'python-tensorflow:1.11-py36'
 
 
 class BackendPythonTorchKernel(BackendKernelBase):
@@ -188,7 +188,7 @@ class BackendPythonTensorFlowGPUKernel(BackendKernelBase):
     }
     banner = 'Backend (GPU-accelerated TensorFlow with Python 3)'
 
-    backend_lang = 'python-tensorflow:1.8-gpu'
+    backend_lang = 'python-tensorflow:1.11-gpu'
 
 
 class BackendJavascriptKernel(BackendKernelBase):
