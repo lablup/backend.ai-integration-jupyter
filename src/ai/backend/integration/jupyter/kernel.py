@@ -143,7 +143,7 @@ class BackendPythonTensorFlowKernel(BackendKernelBase):
     }
     banner = 'Backend (TensorFlow with Python 3)'
 
-    backend_lang = 'python-tensorflow:1.12-py36'
+    backend_lang = 'python-tensorflow:1.12'
 
 
 class BackendPythonTorchKernel(BackendKernelBase):
@@ -156,24 +156,9 @@ class BackendPythonTorchKernel(BackendKernelBase):
         'file_extension': '.py',
         'codemirror_mode': 'python',
     }
-    banner = 'Backend (TensorFlow with Python 3)'
+    banner = 'Backend (PyTorch with Python 3)'
 
-    backend_lang = 'python-torch:0.2'
-
-
-class BackendPythonTorchGPUKernel(BackendKernelBase):
-
-    language = 'python'
-    language_version = '3'
-    language_info = {
-        'name': 'PyTorch (Python 3, GPU) on Backend.AI',
-        'mimetype': 'text/x-python3',
-        'file_extension': '.py',
-        'codemirror_mode': 'python',
-    }
-    banner = 'Backend (TensorFlow with Python 3)'
-
-    backend_lang = 'python-torch:0.2-gpu'
+    backend_lang = 'python-pytorch:1.0'
 
 
 class BackendPythonTensorFlowGPUKernel(BackendKernelBase):
@@ -189,6 +174,21 @@ class BackendPythonTensorFlowGPUKernel(BackendKernelBase):
     banner = 'Backend (GPU-accelerated TensorFlow with Python 3)'
 
     backend_lang = 'python-tensorflow:1.12-gpu'
+
+
+class BackendPythonTorchGPUKernel(BackendKernelBase):
+
+    language = 'python'
+    language_version = '3'
+    language_info = {
+        'name': 'PyTorch (Python 3, GPU) on Backend.AI',
+        'mimetype': 'text/x-python3',
+        'file_extension': '.py',
+        'codemirror_mode': 'python',
+    }
+    banner = 'Backend (GPU-accelerated PyTorch with Python 3)'
+
+    backend_lang = 'python-pytorch:1.0-gpu'
 
 
 class BackendJavascriptKernel(BackendKernelBase):
