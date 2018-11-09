@@ -143,7 +143,7 @@ class BackendPythonTensorFlowKernel(BackendKernelBase):
     }
     banner = 'Backend (TensorFlow with Python 3)'
 
-    backend_lang = 'python-tensorflow:1.11-py36'
+    backend_lang = 'python-tensorflow:1.12-py36'
 
 
 class BackendPythonTorchKernel(BackendKernelBase):
@@ -188,7 +188,7 @@ class BackendPythonTensorFlowGPUKernel(BackendKernelBase):
     }
     banner = 'Backend (GPU-accelerated TensorFlow with Python 3)'
 
-    backend_lang = 'python-tensorflow:1.11-gpu'
+    backend_lang = 'python-tensorflow:1.12-gpu'
 
 
 class BackendJavascriptKernel(BackendKernelBase):
