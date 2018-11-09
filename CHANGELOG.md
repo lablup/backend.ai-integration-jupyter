@@ -1,6 +1,16 @@
 Changes
 =======
 
+0.3.2 (2018-11-09)
+------------------
+
+ - Update TensorFlow/PyTorch kernel versions.
+
+0.3.1 (2018-09-23)
+------------------
+
+ - This was a technical release to fix dependencies.
+
 0.3.0 (2018-09-23)
 ------------------
 
@@ -37,7 +47,6 @@ Changes
 ------------------
 
  - Adapt to the latest API with explicit run IDs per execution.
-
 
 0.2.0 (2017-09-19)
 ------------------
